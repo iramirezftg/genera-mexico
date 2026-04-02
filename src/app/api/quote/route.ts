@@ -74,7 +74,9 @@ export async function POST(request: Request) {
         method: "POST",
         headers: { 
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Origin': 'https://genera-mexico.vercel.app',
+          'Referer': 'https://genera-mexico.vercel.app/'
         },
         body: JSON.stringify({
           Nombre: name,
