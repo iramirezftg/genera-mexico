@@ -70,7 +70,7 @@ export async function POST(request: Request) {
 
     // 3. Enviar correo de notificación usando FormSubmit (AJAX)
     try {
-      await fetch("https://formsubmit.co/ajax/edgar.h.valencia@gmail.com", {
+      await fetch("https://formsubmit.co/ajax/israplenitud@gmail.com", {
         method: "POST",
         headers: { 
           'Content-Type': 'application/json',

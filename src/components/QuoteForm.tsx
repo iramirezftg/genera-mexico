@@ -105,6 +105,24 @@ export default function QuoteForm() {
     { id: 3, label: "Recibo" }
   ];
 
+  const handleNextStep = () => {
+    if (step === 1) {
+      if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
+        alert("Por favor, completa los campos obligatorios: Nombre, Correo y Teléfono.");
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        alert("Por favor, ingresa un correo electrónico válido.");
+        return;
+      }
+      if (formData.phone.replace(/\D/g, '').length < 10) {
+        alert("Por favor, ingresa un número de teléfono válido (mínimo 10 dígitos).");
+        return;
+      }
+    }
+    setStep(step + 1);
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12 mt-4 text-left">
       
@@ -144,22 +162,25 @@ export default function QuoteForm() {
             {step === 1 && (
               <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
                 <input 
-                  type="text" placeholder="Nombre completo" 
+                  type="text" placeholder="* Nombre completo" 
                   className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800 placeholder:text-gray-400"
                   value={formData.name} onChange={e => updateData({ name: e.target.value })} 
+                  required
                 />
                 <input 
-                  type="email" placeholder="Correo electrónico" 
+                  type="email" placeholder="* Correo electrónico (ej. juan@gmail.com)" 
                   className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800 placeholder:text-gray-400"
                   value={formData.email} onChange={e => updateData({ email: e.target.value })} 
+                  required
                 />
                 <input 
-                  type="tel" placeholder="Télefono" 
+                  type="tel" placeholder="* Teléfono a 10 dígitos" 
                   className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800 placeholder:text-gray-400"
                   value={formData.phone} onChange={e => updateData({ phone: e.target.value })} 
+                  required
                 />
                 <input 
-                  type="text" placeholder="Ciudad" 
+                  type="text" placeholder="Ciudad (Opcional)" 
                   className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800 placeholder:text-gray-400"
                   value={formData.city} onChange={e => updateData({ city: e.target.value })} 
                 />
@@ -228,7 +249,7 @@ export default function QuoteForm() {
            ) : <div />}
 
            {step < 3 ? (
-             <button onClick={() => setStep(step + 1)} className="px-10 py-3 bg-[#2d6a4f] text-white rounded-full font-bold hover:bg-[#1b4332] transition-colors shadow-md">
+             <button onClick={handleNextStep} className="px-10 py-3 bg-[#2d6a4f] text-white rounded-full font-bold hover:bg-[#1b4332] transition-colors shadow-md">
                Continuar
              </button>
            ) : (
