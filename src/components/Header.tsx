@@ -62,14 +62,7 @@ export default function Header() {
                 {link.name}
               </a>
             ))}
-            <a 
-              href="/login"
-              className={`text-sm font-bold tracking-wide transition-colors ${
-                isScrolled ? 'text-brand-green hover:text-emerald-700' : 'text-white hover:text-gray-200 drop-shadow-sm'
-              }`}
-            >
-              Acceso Portal
-            </a>
+
             <a 
               href="#contacto" 
               className="bg-brand-amber text-brand-dark px-6 py-2.5 rounded-full font-bold text-sm tracking-wide shadow-md hover:scale-105 transition-transform"
@@ -106,13 +99,7 @@ export default function Header() {
               {link.name}
             </a>
           ))}
-          <a
-            href="/login"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="text-brand-green font-bold p-2 mb-2 rounded-lg hover:bg-brand-green/5 border border-transparent hover:border-brand-green/20"
-          >
-            Acceso Portal
-          </a>
+
           <a 
             href="#contacto" 
             onClick={() => setIsMobileMenuOpen(false)}
