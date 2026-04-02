@@ -36,14 +36,14 @@ export async function POST(request: Request) {
 
       if (uploadError) {
         console.warn(`Error al subir archivo a Supabase, omitiendo adjunto: ${uploadError.message}`);
+      } else {
+        // Get public URL sólo si se subió correctamente
+        const { data: publicUrlData } = supabase.storage
+          .from('recibos_cfe')
+          .getPublicUrl(filePath);
+          
+        bill_file_url = publicUrlData.publicUrl;
       }
-
-      // Get public URL
-      const { data: publicUrlData } = supabase.storage
-        .from('recibos_cfe')
-        .getPublicUrl(filePath);
-        
-      bill_file_url = publicUrlData.publicUrl;
     }
 
     // 2. Insert Lead into Postgres Table
