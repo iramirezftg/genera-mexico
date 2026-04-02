@@ -34,15 +34,15 @@ export default function Header() {
           
           {/* Logo */}
           <a href="#top" className="flex items-center">
-            <div className="relative h-10 md:h-12 w-auto">
+            <div className={`px-3 py-1.5 rounded-xl transition-all duration-300 ${
+              isScrolled ? '' : 'bg-white/90 backdrop-blur-sm shadow-md'
+            }`}>
               <Image
                 src="/logo-genera.png"
                 alt="Genera México — Energía Consciente"
-                width={200}
-                height={60}
-                className={`h-10 md:h-12 w-auto object-contain transition-all duration-300 ${
-                  isScrolled ? '' : 'brightness-0 invert drop-shadow-md'
-                }`}
+                width={160}
+                height={48}
+                className="h-8 md:h-10 w-auto object-contain"
                 priority
               />
             </div>
