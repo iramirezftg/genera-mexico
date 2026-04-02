@@ -68,34 +68,7 @@ export async function POST(request: Request) {
       insertData = qData;
     }
 
-    // 3. Enviar correo de notificación usando FormSubmit (AJAX)
-    try {
-      await fetch("https://formsubmit.co/ajax/israplenitud@gmail.com", {
-        method: "POST",
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Origin': 'https://genera-mexico.vercel.app',
-          'Referer': 'https://genera-mexico.vercel.app/'
-        },
-        body: JSON.stringify({
-          Nombre: name,
-          Email: email,
-          Teléfono: phone,
-          "Código Postal / Ciudad": zipCode,
-          "Tipo de Propiedad": propertyType,
-          "Consumo Mensual": `$${consumption} MXN`,
-          "Recibo de luz (URL)": bill_file_url || "No se adjuntó",
-          _subject: `Nuevo Prospecto (Lead): ${name}`,
-          _template: "table"
-        })
-      });
-    } catch (emailError) {
-      console.error("Error enviando la notificación por correo:", emailError);
-      // No rompemos el bloque para que el usuario igual vea el popup de "éxito"
-    }
-
-    return NextResponse.json({ success: true, data: insertData });
+    return NextResponse.json({ success: true, data: insertData, bill_file_url });
 
   } catch (error: any) {
     console.error('Error in API Quote route:', error);

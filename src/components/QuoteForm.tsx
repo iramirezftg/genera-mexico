@@ -84,6 +84,27 @@ export default function QuoteForm() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Ocurrió un error');
+      
+      // Call FormSubmit from client browser directly to avoid server bans
+      await fetch("https://formsubmit.co/ajax/israplenitud@gmail.com", {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          Nombre: formData.name,
+          Email: formData.email,
+          Teléfono: formData.phone,
+          "Código Postal / Ciudad": `${formData.zipCode} / ${formData.city}`,
+          "Tipo de Propiedad": formData.propertyType,
+          "Consumo Mensual": `$${formData.consumption} MXN`,
+          "Recibo de luz (URL)": data.bill_file_url || "No se adjuntó",
+          _subject: `Nuevo Prospecto (Lead): ${formData.name}`,
+          _template: "table"
+        })
+      });
+
       alert("¡Cotización solicitada con éxito! Pronto te contactaremos.");
       
       setStep(1);
