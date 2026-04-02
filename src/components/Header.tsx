@@ -26,26 +26,27 @@ export default function Header() {
   return (
     <header 
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-sm py-4'
-          : 'bg-gradient-to-b from-black/70 via-black/30 to-transparent py-6'
+        isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           
-          {/* Logo — colores naturales en ambos estados */}
-          <a href="#top" className="flex items-center">
-            <Image
-              src="/logo-genera.png"
-              alt="Genera México — Energía Consciente"
-              width={320}
-              height={96}
-              className={`h-auto object-contain transition-all duration-300 ${
-                isScrolled ? 'w-36 md:w-48' : 'w-44 md:w-64'
-              }`}
-              priority
-            />
+          {/* Logo */}
+          <a href="#top" className="flex items-center gap-3">
+            <div className="relative w-10 h-10 md:w-12 md:h-12 overflow-hidden rounded-full">
+              <Image 
+                src="/logo.jpg" 
+                alt="Genera México Logo" 
+                fill
+                className="object-contain"
+              />
+            </div>
+            <span className={`font-bold text-xl md:text-2xl tracking-tight transition-colors ${
+              isScrolled ? 'text-brand-dark' : 'text-white drop-shadow-md'
+            }`}>
+              Genera
+            </span>
           </a>
 
           {/* Desktop Nav */}

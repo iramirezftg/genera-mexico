@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -9,15 +8,7 @@ export default function Footer() {
           
           {/* Columna 1: Marca */}
           <div>
-            <a href="#top" className="inline-block mb-5">
-              <Image
-                src="/logo-genera.png"
-                alt="Genera México — Energía Consciente"
-                width={180}
-                height={54}
-                className="h-10 w-auto object-contain"
-              />
-            </a>
+            <h3 className="text-xl font-bold text-brand-green mb-4">Genera Solar</h3>
             <p className="text-gray-500 pr-4 leading-relaxed">
               Energía consciente para hogares y empresas que buscan ahorro, control y sostenibilidad real.
             </p>
