@@ -3,6 +3,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, EffectCoverflow } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-coverflow';
 
 const testimonials = [
   {
@@ -25,6 +30,20 @@ const testimonials = [
     text: "Teníamos miedo de que los paneles afearan la fachada, pero el diseño fue súper limpio y estético. Además el trámite con CFE lo hicieron ellos al 100%. Recomiendo ampliamente su servicio premium.",
     rating: 5,
     delay: 0.3
+  },
+  {
+    name: "Gabriela Ruiz",
+    type: "Residencial (Querétaro)",
+    text: "Excelente servicio desde el primer contacto hasta la instalación. El monitoreo por la app me encanta porque veo exactamente cuánto estoy ahorrando cada día. Totalmente recomendado.",
+    rating: 5,
+    delay: 0.4
+  },
+  {
+    name: "Roberto Garza",
+    type: "Industrial (Nuevo León)",
+    text: "Teníamos un consumo altísimo en nuestra nave industrial. Con el sistema de Genera bajamos nuestro recibo un 95%. La inversión se paga sola muy rápido y además somos más verdes.",
+    rating: 5,
+    delay: 0.5
   }
 ];
 
@@ -50,36 +69,55 @@ export default function Testimonials() {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((t, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: t.delay }}
-              className="bg-slate-800/50 border border-slate-700 p-8 rounded-3xl backdrop-blur-sm relative"
-            >
-              <Quote size={40} className="absolute top-6 right-6 text-brand-amber/20" />
-              <div className="flex gap-1 mb-6 text-brand-amber">
-                {[...Array(t.rating)].map((_, i) => (
-                  <Star key={i} size={20} fill="currentColor" />
-                ))}
-              </div>
-              <p className="text-gray-200 mb-8 leading-relaxed">
-                "{t.text}"
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-brand-amber to-brand-green rounded-full flex items-center justify-center text-brand-dark font-bold text-lg">
-                  {t.name.charAt(0)}
+        <div className="mt-8 relative w-full">
+          <Swiper
+            effect={'coverflow'}
+            grabCursor={true}
+            centeredSlides={true}
+            slidesPerView={'auto'}
+            loop={true}
+            autoplay={{
+              delay: 3500,
+              disableOnInteraction: false,
+            }}
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 100,
+              modifier: 2,
+              slideShadows: false,
+            }}
+            pagination={{ clickable: true }}
+            modules={[EffectCoverflow, Pagination, Autoplay]}
+            className="!pb-16 [&_.swiper-pagination-bullet]:bg-slate-400 [&_.swiper-pagination-bullet]:opacity-50 [&_.swiper-pagination-bullet-active]:bg-brand-green [&_.swiper-pagination-bullet-active]:opacity-100"
+          >
+            {testimonials.map((t, idx) => (
+              <SwiperSlide key={idx} className="!w-[320px] md:!w-[420px] !h-auto">
+                <div className="bg-slate-800/80 border border-slate-700 p-8 rounded-3xl backdrop-blur-sm relative h-full flex flex-col justify-between shadow-xl">
+                  <Quote size={40} className="absolute top-6 right-6 text-brand-amber/10" />
+                  <div>
+                    <div className="flex gap-1 mb-6 text-brand-amber">
+                      {[...Array(t.rating)].map((_, i) => (
+                        <Star key={i} size={20} fill="currentColor" />
+                      ))}
+                    </div>
+                    <p className="text-gray-200 mb-8 leading-relaxed relative z-10">
+                      "{t.text}"
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4 mt-auto relative z-10">
+                    <div className="w-12 h-12 bg-gradient-to-br from-brand-amber to-brand-green rounded-full flex items-center justify-center text-brand-dark font-bold text-lg shrink-0">
+                      {t.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h4 className="font-bold">{t.name}</h4>
+                      <p className="text-gray-400 text-sm">{t.type}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-bold">{t.name}</h4>
-                  <p className="text-gray-400 text-sm">{t.type}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </div>
     </section>

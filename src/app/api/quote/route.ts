@@ -16,8 +16,10 @@ export async function POST(request: Request) {
 
     let bill_file_url = null;
 
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
+
     // Safety check for credentials before executing operations against an unconfigured DB
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !supabaseKey) {
       console.warn("Faltan las credenciales de Supabase en .env.local, devolviendo éxito simulado.");
       return NextResponse.json({ success: true, simulated: true });
     }
@@ -45,7 +47,8 @@ export async function POST(request: Request) {
     }
 
     // 2. Insert Lead into Postgres Table
-    const { data: insertData, error: insertError } = await supabase
+    let insertData = null;
+    const { data: qData, error: insertError } = await supabase
       .from('leads')
       .insert([
         { 
@@ -60,7 +63,34 @@ export async function POST(request: Request) {
       ]);
 
     if (insertError) {
-      throw new Error(`Error al guardar en base de datos: ${insertError.message}`);
+      console.warn(`Error al guardar en base de datos, omitiendo por ahora: ${insertError.message}`);
+    } else {
+      insertData = qData;
+    }
+
+    // 3. Enviar correo de notificación usando FormSubmit (AJAX)
+    try {
+      await fetch("https://formsubmit.co/ajax/edgar.h.valencia@gmail.com", {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          Nombre: name,
+          Email: email,
+          Teléfono: phone,
+          "Código Postal / Ciudad": zipCode,
+          "Tipo de Propiedad": propertyType,
+          "Consumo Mensual": `$${consumption} MXN`,
+          "Recibo de luz (URL)": bill_file_url || "No se adjuntó",
+          _subject: `Nuevo Prospecto (Lead): ${name}`,
+          _template: "table"
+        })
+      });
+    } catch (emailError) {
+      console.error("Error enviando la notificación por correo:", emailError);
+      // No rompemos el bloque para que el usuario igual vea el popup de "éxito"
     }
 
     return NextResponse.json({ success: true, data: insertData });

@@ -15,11 +15,28 @@ export default function SavingsSimulator() {
   });
 
   useEffect(() => {
-    // Fórmulas aproximadas basadas en el ejemplo (Recibo 3200)
+    // Fórmulas exactas según Excel "Calculadora de Paneles Solares"
+    // 1. Convertir pesos a kWh estimado 
+    const TARIFA_KWH = 2.5; 
+    const kWhBimestral = recibo / TARIFA_KWH;
+    const kWhMensual = kWhBimestral / 2;
+
+    // 2. Variables técnicas
+    const wPanel = 650;
+    const HSP = 5;
+    const diasMes = 30;
+    const oversizing = 1.3;
+
+    // 3. Cálculos
+    const generacionMensualPanel = (wPanel * HSP * diasMes) / 1000;
+    const paneles = Math.max(1, Math.ceil((kWhMensual * oversizing) / generacionMensualPanel));
+    
+    // Costo Premium (basado en $113,500 MXN para 10 paneles)
+    const costo = paneles * 11350;
+    
+    // ROI y métricas de Ahorro
     const ahorroMensual = Math.round(recibo * 0.95);
     const ahorroAnual = ahorroMensual * 12;
-    const paneles = Math.max(1, Math.ceil(recibo / 246)); // Para dar ~13 con 3200
-    const costo = paneles * 8615; // Para dar ~112000 con 13 paneles
     const roi = Math.ceil(costo / (ahorroMensual || 1));
     const ahorro25 = ahorroAnual * 25;
 
@@ -27,7 +44,7 @@ export default function SavingsSimulator() {
       ahorroMensual,
       ahorroAnual,
       paneles,
-      costo: Math.round(costo / 1000) * 1000, // Redondear a miles
+      costo,
       roi,
       ahorro25
     });
@@ -80,7 +97,7 @@ export default function SavingsSimulator() {
             <ResultCard index={1} title="AHORRO ANUAL" value={`$${metrics.ahorroAnual.toLocaleString()}`} />
             <ResultCard index={2} title="COSTO ESTIMADO" value={`$${metrics.costo.toLocaleString()}`} />
             <ResultCard index={3} title="ROI (MESES)" value={metrics.roi.toString()} />
-            <ResultCard index={4} title="PANELES SUGERIDOS" value={metrics.paneles.toString()} />
+            <ResultCard index={4} title="PANELES (650W)" value={metrics.paneles.toString()} />
             <ResultCard index={5} title="AHORRO 25 AÑOS" value={`$${metrics.ahorro25.toLocaleString()}`} />
           </div>
 

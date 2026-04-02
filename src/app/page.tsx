@@ -13,6 +13,7 @@ import { Battery, ShieldCheck, Zap, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import QuoteForm from '../components/QuoteForm';
 import Testimonials from '../components/Testimonials';
+import PhotoGallery from '../components/PhotoGallery';
 import ProcessSection from '../components/ProcessSection';
 import FAQSection from '../components/FAQSection';
 import SimpleContactForm from '../components/SimpleContactForm';
@@ -182,6 +183,9 @@ export default function LandingPage() {
       {/* 5. TESTIMONIOS */}
       <Testimonials />
 
+      {/* 5.5. GALERÍA DE FOTOS INSTALACIONES */}
+      <PhotoGallery />
+
       {/* 6. PREGUNTAS FRECUENTES (FAQ) */}
       <FAQSection />
 
@@ -204,11 +208,12 @@ export default function LandingPage() {
 
       {/* BOTÓN FLOTANTE WHATSAPP */}
       <a 
-        href="https://wa.me/TUNUMERO" 
+        href="https://wa.me/528112063766?text=Hola,%20me%20interesa%20reducir%20o%20congelar%20mi%20recibo%20de%20luz.%20%C2%BFPodr%C3%ADan%20apoyarme%20con%20una%20cotizaci%C3%B3n%3F" 
         target="_blank" rel="noreferrer"
-        className="fixed bottom-6 right-6 z-50 p-4 bg-green-500 text-white rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center animate-bounce"
+        className="fixed bottom-6 right-6 z-50 px-5 py-4 bg-[#25D366] text-white rounded-full shadow-2xl hover:scale-105 transition-transform flex items-center justify-center gap-2 animate-bounce hover:animate-none"
       >
-        <MessageCircle size={32} />
+        <MessageCircle size={28} />
+        <span className="font-bold hidden sm:inline">Cotiza por WhatsApp</span>
       </a>
 
     </div>
