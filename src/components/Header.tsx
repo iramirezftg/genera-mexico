@@ -42,7 +42,7 @@ export default function Header() {
               width={180}
               height={54}
               className={`w-auto object-contain transition-all duration-300 ${
-                isScrolled ? 'h-9 md:h-11' : 'h-10 md:h-12'
+                isScrolled ? 'h-12 md:h-14' : 'h-14 md:h-16'
               }`}
               priority
             />
