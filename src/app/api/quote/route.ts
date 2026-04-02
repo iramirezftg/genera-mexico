@@ -35,7 +35,7 @@ export async function POST(request: Request) {
         .upload(filePath, file);
 
       if (uploadError) {
-        throw new Error(`Error al subir archivo: ${uploadError.message}`);
+        console.warn(`Error al subir archivo a Supabase, omitiendo adjunto: ${uploadError.message}`);
       }
 
       // Get public URL
