@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   description: "Landing page para Genera México",
 };
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,6 +27,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
