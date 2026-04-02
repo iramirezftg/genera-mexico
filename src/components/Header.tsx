@@ -33,20 +33,19 @@ export default function Header() {
         <div className="flex justify-between items-center">
           
           {/* Logo */}
-          <a href="#top" className="flex items-center gap-3">
-            <div className="relative w-10 h-10 md:w-12 md:h-12 overflow-hidden rounded-full">
+          <a href="#top" className="flex items-center">
+            <div className="relative h-12 md:h-14 w-auto">
               <Image 
-                src="/logo.jpg" 
-                alt="Genera México Logo" 
-                fill
-                className="object-contain"
+                src="/logo-genera.jpg" 
+                alt="Genera México — Energía Consciente" 
+                width={160}
+                height={56}
+                className={`h-12 md:h-14 w-auto object-contain transition-all duration-300 ${
+                  isScrolled ? '' : 'brightness-0 invert'
+                }`}
+                priority
               />
             </div>
-            <span className={`font-bold text-xl md:text-2xl tracking-tight transition-colors ${
-              isScrolled ? 'text-brand-dark' : 'text-white drop-shadow-md'
-            }`}>
-              Genera
-            </span>
           </a>
 
           {/* Desktop Nav */}
