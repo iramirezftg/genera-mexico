@@ -36,7 +36,7 @@ export default function Header() {
           <a href="#top" className="flex items-center">
             <div className={`relative transition-all duration-300 ${isScrolled ? 'h-10 w-36' : 'h-12 w-44'}`}>
               <Image
-                src="/logo-genera.jpg"
+                src="/logo-genera.png"
                 alt="Genera — energía consciente"
                 fill
                 className="object-contain object-left"

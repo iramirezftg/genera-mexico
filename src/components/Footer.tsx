@@ -11,7 +11,7 @@ export default function Footer() {
           <div>
             <div className="relative h-10 w-40 mb-4">
               <Image
-                src="/logo-genera.jpg"
+                src="/logo-genera.png"
                 alt="Genera — energía consciente"
                 fill
                 className="object-contain object-left"
@@ -59,7 +59,7 @@ export default function Footer() {
         <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="relative h-7 w-28">
             <Image
-              src="/logo-genera.jpg"
+              src="/logo-genera.png"
               alt="Genera"
               fill
               className="object-contain object-left opacity-50"
