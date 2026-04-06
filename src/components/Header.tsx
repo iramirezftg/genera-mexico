@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+import GeneraLogo from './GeneraLogo';
 import { Menu, X } from 'lucide-react';
 
 export default function Header() {
@@ -34,15 +34,10 @@ export default function Header() {
 
           {/* Logo */}
           <a href="#top" className="flex items-center">
-            <div className={`relative transition-all duration-300 ${isScrolled ? 'h-10 w-36' : 'h-12 w-44'}`}>
-              <Image
-                src="/logo-genera.png"
-                alt="Genera — energía consciente"
-                fill
-                className="object-contain object-left"
-                priority
-              />
-            </div>
+            <GeneraLogo
+              dark={!isScrolled}
+              className={`transition-all duration-300 ${isScrolled ? 'h-10 w-36' : 'h-12 w-44'}`}
+            />
           </a>
 
           {/* Desktop Nav */}

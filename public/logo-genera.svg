@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 80" role="img" aria-label="Genera — energía consciente">
+  <title>Genera — energía consciente</title>
+
+  <!-- ── Ícono G circular con enchufe ─────────────────── -->
+  <g transform="translate(40,40)">
+
+    <!-- Anillo G: arco exterior CCW de 30° a 330°, vuelve por arco interior CW -->
+    <!-- Outer r=34, inner r=21, gap en el lado derecho (±30°) -->
+    <!-- Outer start (30°): (29.4, 17)  end (330°): (29.4, -17) -->
+    <!-- Inner start (330°): (18.2,-10.5) end (30°): (18.2, 10.5) -->
+    <path
+      d="M 29.4,17
+         A 34,34 0 1,0 29.4,-17
+         L 18.2,-10.5
+         A 21,21 0 1,1 18.2,10.5
+         Z"
+      fill="#FFB800"
+    />
+
+    <!-- Barra horizontal del "G" (crossbar) -->
+    <rect x="18" y="-5.5" width="17" height="11" fill="#FFB800" rx="1"/>
+
+    <!-- Enchufe blanco centrado dentro del círculo -->
+    <!-- Pata izquierda -->
+    <rect x="-8"  y="-20" width="5"  height="12" fill="white" rx="2.5"/>
+    <!-- Pata derecha -->
+    <rect x="3"   y="-20" width="5"  height="12" fill="white" rx="2.5"/>
+    <!-- Cuerpo del enchufe -->
+    <rect x="-12" y="-8"  width="24" height="16" fill="white" rx="5"/>
+    <!-- Cable -->
+    <rect x="-3"  y="8"   width="6"  height="9"  fill="white" rx="3"/>
+
+  </g>
+
+  <!-- ── Texto "genera" ────────────────────────────────── -->
+  <text
+    x="90" y="48"
+    font-family="'Plus Jakarta Sans', Inter, -apple-system, sans-serif"
+    font-size="34"
+    font-weight="800"
+    fill="#082336"
+    letter-spacing="-0.8"
+  >genera</text>
+
+  <!-- ── Subtexto "energía consciente" ─────────────────── -->
+  <text
+    x="91" y="64"
+    font-family="'Plus Jakarta Sans', Inter, -apple-system, sans-serif"
+    font-size="11.5"
+    font-weight="400"
+    fill="#4A5568"
+    letter-spacing="0.15"
+  >energía <tspan font-weight="700" fill="#1E4620">consciente</tspan></text>
+
+</svg>

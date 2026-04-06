@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import GeneraLogo from './GeneraLogo';
 
 export default function Footer() {
   return (
@@ -9,14 +9,7 @@ export default function Footer() {
 
           {/* Columna 1: Marca */}
           <div>
-            <div className="relative h-10 w-40 mb-4">
-              <Image
-                src="/logo-genera.png"
-                alt="Genera — energía consciente"
-                fill
-                className="object-contain object-left"
-              />
-            </div>
+            <GeneraLogo className="h-10 w-40 mb-4" />
             <p className="text-gray-500 pr-4 leading-relaxed text-sm">
               Energía consciente para hogares y empresas que buscan ahorro, control y sostenibilidad real.
             </p>
@@ -57,14 +50,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative h-7 w-28">
-            <Image
-              src="/logo-genera.png"
-              alt="Genera"
-              fill
-              className="object-contain object-left opacity-50"
-            />
-          </div>
+          <GeneraLogo className="h-7 w-28 opacity-50" />
           <p className="text-gray-400 text-xs text-center">
             © {new Date().getFullYear()} Genera. Todos los derechos reservados.
           </p>
