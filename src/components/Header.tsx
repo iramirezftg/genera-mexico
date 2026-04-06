@@ -24,36 +24,32 @@ export default function Header() {
   ];
 
   return (
-    <header 
+    <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'
+        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-2' : 'bg-transparent py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
-          
+
           {/* Logo */}
-          <a href="#top" className="flex items-center gap-3">
-            <div className="relative w-10 h-10 md:w-12 md:h-12 overflow-hidden rounded-full">
-              <Image 
-                src="/logo.jpg" 
-                alt="Genera México Logo" 
+          <a href="#top" className="flex items-center">
+            <div className={`relative transition-all duration-300 ${isScrolled ? 'h-10 w-36' : 'h-12 w-44'}`}>
+              <Image
+                src="/logo-genera.jpg"
+                alt="Genera — energía consciente"
                 fill
-                className="object-contain"
+                className="object-contain object-left"
+                priority
               />
             </div>
-            <span className={`font-bold text-xl md:text-2xl tracking-tight transition-colors ${
-              isScrolled ? 'text-brand-dark' : 'text-white drop-shadow-md'
-            }`}>
-              Genera
-            </span>
           </a>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a 
-                key={link.name} 
+              <a
+                key={link.name}
                 href={link.href}
                 className={`text-sm font-semibold tracking-wide transition-colors ${
                   isScrolled ? 'text-gray-600 hover:text-brand-green' : 'text-white/90 hover:text-white drop-shadow-sm'
@@ -63,8 +59,8 @@ export default function Header() {
               </a>
             ))}
 
-            <a 
-              href="#contacto" 
+            <a
+              href="#contacto"
               className="bg-brand-amber text-brand-dark px-6 py-2.5 rounded-full font-bold text-sm tracking-wide shadow-md hover:scale-105 transition-transform"
             >
               Cotizar Ahora
@@ -72,7 +68,7 @@ export default function Header() {
           </nav>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             className="md:hidden text-2xl"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
@@ -90,8 +86,8 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 py-4 px-4 flex flex-col gap-4">
           {navLinks.map((link) => (
-            <a 
-              key={link.name} 
+            <a
+              key={link.name}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-gray-600 font-semibold p-2 rounded-lg hover:bg-gray-50"
@@ -100,10 +96,10 @@ export default function Header() {
             </a>
           ))}
 
-          <a 
-            href="#contacto" 
+          <a
+            href="#contacto"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="bg-brand-green text-white px-4 py-3 rounded-xl font-bold text-center mt-2 shadow-sm"
+            className="bg-brand-amber text-brand-dark px-4 py-3 rounded-xl font-bold text-center mt-2 shadow-sm"
           >
             Cotizar Ahora
           </a>
