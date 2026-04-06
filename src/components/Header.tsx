@@ -34,10 +34,9 @@ export default function Header() {
 
           {/* Logo */}
           <a href="#top" className="flex items-center">
-            <GeneraLogo
-              dark={!isScrolled}
-              className={`transition-all duration-300 ${isScrolled ? 'h-10 w-36' : 'h-12 w-44'}`}
-            />
+            <div className={`transition-all duration-300 ${isScrolled ? 'h-9' : 'h-11'}`}>
+              <GeneraLogo dark={!isScrolled} />
+            </div>
           </a>
 
           {/* Desktop Nav */}

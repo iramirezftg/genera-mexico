@@ -9,7 +9,7 @@ export default function Footer() {
 
           {/* Columna 1: Marca */}
           <div>
-            <GeneraLogo className="h-10 w-40 mb-4" />
+            <div className="h-9 mb-4"><GeneraLogo /></div>
             <p className="text-gray-500 pr-4 leading-relaxed text-sm">
               Energía consciente para hogares y empresas que buscan ahorro, control y sostenibilidad real.
             </p>
@@ -50,7 +50,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <GeneraLogo className="h-7 w-28 opacity-50" />
+          <div className="h-6 opacity-40"><GeneraLogo /></div>
           <p className="text-gray-400 text-xs text-center">
             © {new Date().getFullYear()} Genera. Todos los derechos reservados.
           </p>
