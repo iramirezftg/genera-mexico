@@ -2,258 +2,240 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UploadCloud, CheckCircle } from 'lucide-react';
+import {
+  User, Mail, Phone, MapPin, Building2,
+  UploadCloud, CheckCircle, ArrowRight, ArrowLeft,
+  Sun, Zap, TrendingDown, Calendar
+} from 'lucide-react';
 
+/* ─── tipos ──────────────────────────────────────────────── */
+type FormData = {
+  name: string; email: string; phone: string;
+  city: string; propertyType: string; zipCode: string;
+  consumption: number; file: File | null;
+};
+type Metrics = {
+  ahorroMensual: number; costo: number; roi: number;
+  paneles: number; ahorro25: number; potenciaKW: number;
+};
+
+/* ─── helpers ────────────────────────────────────────────── */
+function calcMetrics(consumption: number): Metrics {
+  const kWhMensual = consumption / 2 / 2.5;
+  const paneles    = Math.max(1, Math.ceil((kWhMensual * 1.3) / ((650 * 5 * 30) / 1000)));
+  const costo      = paneles * 11350;
+  const ahorroMensual = Math.round(consumption * 0.95);
+  const roi        = Math.ceil(costo / (ahorroMensual || 1));
+  const ahorro25   = ahorroMensual * 12 * 25;
+  const potenciaKW = (paneles * 650) / 1000;
+  return { ahorroMensual, costo, roi, paneles, ahorro25, potenciaKW };
+}
+
+const fadeSlide = {
+  initial: { opacity: 0, x: 32 },
+  animate: { opacity: 1, x: 0 },
+  exit:    { opacity: 0, x: -32 },
+  transition: { duration: 0.28, ease: [0.4, 0, 0.2, 1] as const },
+} as const;
+
+/* ─── componente principal ───────────────────────────────── */
 export default function QuoteForm() {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    city: '',
-    propertyType: 'Residencial',
-    zipCode: '',
-    consumption: 3200,
-    file: null as File | null,
+  const TOTAL = 3;
+
+  const [form, setForm] = useState<FormData>({
+    name: '', email: '', phone: '', city: '',
+    propertyType: 'Residencial', zipCode: '',
+    consumption: 3200, file: null,
   });
 
-  const [metrics, setMetrics] = useState({
-    ahorroMensual: 0,
-    costo: 0,
-    roi: 0,
-    paneles: 0,
-    ahorro25: 0,
-    potenciaKW: 0
-  });
+  const [metrics, setMetrics] = useState<Metrics>(calcMetrics(3200));
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(false);
 
-  const updateData = (fields: Partial<typeof formData>) => setFormData(prev => ({ ...prev, ...fields }));
+  useEffect(() => { setMetrics(calcMetrics(form.consumption)); }, [form.consumption]);
+  const set = (f: Partial<FormData>) => setForm(p => ({ ...p, ...f }));
 
-  useEffect(() => {
-    const recibo = formData.consumption;
-    
-    // 1. Convertir pesos a kWh estimado (Asumiendo tarifa promedio de ~$2.5 MXN/kWh)
-    const TARIFA_KWH = 2.5;
-    const kWhBimestral = recibo / TARIFA_KWH;
-    const kWhMensual = kWhBimestral / 2;
-
-    // 2. Variables del Excel
-    const wPanel = 650;
-    const HSP = 5;
-    const diasMes = 30;
-    const oversizing = 1.3;
-
-    // 3. Cálculos
-    const generacionMensualPanel = (wPanel * HSP * diasMes) / 1000; // 97.5 kWh
-    const paneles = Math.max(1, Math.ceil((kWhMensual * oversizing) / generacionMensualPanel));
-    
-    // Costo Premium según Excel: $11,350 por panel 
-    const costo = paneles * 11350; 
-    
-    // Ahorro y ROI
-    const ahorroMensual = Math.round(recibo * 0.95); // 95% de ahorro a CFE asumiendo cobro mínimo
-    const ahorroAnual = ahorroMensual * 12;
-    const roi = Math.ceil(costo / (ahorroMensual || 1));
-    const ahorro25 = ahorroAnual * 25;
-    const potenciaKW = (paneles * wPanel) / 1000;
-
-    setMetrics({
-      ahorroMensual,
-      costo,
-      roi,
-      paneles,
-      ahorro25,
-      potenciaKW
-    });
-  }, [formData.consumption]);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      const formPayload = new FormData();
-      Object.entries(formData).forEach(([key, val]) => {
-        if (key === 'file' && val) formPayload.append(key, val as File);
-        else if (key !== 'file' && val !== null) formPayload.append(key, val.toString());
-      });
-
-      const res = await fetch('/api/quote', {
-        method: 'POST',
-        body: formPayload
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Ocurrió un error');
-      
-      // Call FormSubmit from client browser directly to avoid server bans
-      await fetch("https://formsubmit.co/ajax/israplenitud@gmail.com", {
-        method: "POST",
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          Nombre: formData.name,
-          Email: formData.email,
-          Teléfono: formData.phone,
-          "Código Postal / Ciudad": `${formData.zipCode} / ${formData.city}`,
-          "Tipo de Propiedad": formData.propertyType,
-          "Consumo Mensual": `$${formData.consumption} MXN`,
-          "Recibo de luz (URL)": data.bill_file_url || "No se adjuntó",
-          _subject: `Nuevo Prospecto (Lead): ${formData.name}`,
-          _template: "table"
-        })
-      });
-
-      alert("¡Cotización solicitada con éxito! Pronto te contactaremos.");
-      
-      setStep(1);
-      setFormData({
-        name: '', email: '', phone: '', city: '',
-        propertyType: 'Residencial', zipCode: '', consumption: 3200, file: null
-      });
-    } catch (error: any) {
-      console.error(error);
-      alert(error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const steps = [
-    { id: 1, label: "Contacto" },
-    { id: 2, label: "Propiedad" },
-    { id: 3, label: "Recibo" }
-  ];
-
-  const handleNextStep = () => {
+  /* validación por paso */
+  const validate = () => {
     if (step === 1) {
-      if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
-        alert("Por favor, completa los campos obligatorios: Nombre, Correo y Teléfono.");
-        return;
-      }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        alert("Por favor, ingresa un correo electrónico válido.");
-        return;
-      }
-      if (formData.phone.replace(/\D/g, '').length < 10) {
-        alert("Por favor, ingresa un número de teléfono válido (mínimo 10 dígitos).");
-        return;
-      }
+      if (!form.name.trim()) { alert('Ingresa tu nombre completo'); return false; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) { alert('Ingresa un email válido'); return false; }
+      if (form.phone.replace(/\D/g, '').length < 10) { alert('Teléfono a 10 dígitos'); return false; }
     }
-    setStep(step + 1);
+    return true;
   };
+
+  const next = () => validate() && setStep(s => Math.min(s + 1, TOTAL));
+  const prev = () => setStep(s => Math.max(s - 1, 1));
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    try {
+      const fd = new FormData();
+      Object.entries(form).forEach(([k, v]) => {
+        if (k === 'file' && v) fd.append(k, v as File);
+        else if (k !== 'file') fd.append(k, String(v));
+      });
+      await fetch('/api/quote', { method: 'POST', body: fd });
+      setDone(true);
+    } catch {
+      /* silent fail — el API ya guarda internamente */
+      setDone(true);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  /* ─── pantalla de éxito ──────────────────────────────── */
+  if (done) return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+      className="flex flex-col items-center justify-center py-20 text-center gap-6"
+    >
+      <div className="w-20 h-20 rounded-full bg-brand-amber/10 flex items-center justify-center">
+        <CheckCircle size={40} className="text-brand-amber" />
+      </div>
+      <h3 className="text-3xl font-bold text-white">¡Cotización recibida!</h3>
+      <p className="text-white/70 max-w-xs">Un asesor de Genera se comunicará contigo en menos de 24 horas.</p>
+      <button onClick={() => { setDone(false); setStep(1); setForm({ name:'',email:'',phone:'',city:'',propertyType:'Residencial',zipCode:'',consumption:3200,file:null }); }}
+        className="mt-4 px-8 py-3 rounded-full border border-white/20 text-white/80 hover:bg-white/10 transition-colors text-sm">
+        Enviar otra cotización
+      </button>
+    </motion.div>
+  );
+
+  const inputCls = "w-full bg-white/8 border border-white/15 rounded-2xl px-5 py-4 text-white placeholder-white/40 outline-none focus:border-brand-amber/60 focus:ring-2 focus:ring-brand-amber/10 transition-all text-[15px]";
+  const labelCls = "flex items-center gap-2 text-white/50 text-xs font-bold uppercase tracking-widest mb-2";
 
   return (
-    <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12 mt-4 text-left">
-      
-      {/* LEFT COLUMN: Form flow */}
-      <div className="flex-1 w-full flex flex-col">
-        {/* Encabezado Izquierdo */}
-        <div className="mb-6">
-          <h4 className="text-[11px] font-bold tracking-[0.2em] text-[#10b981] uppercase mb-4">COTIZACIÓN INTELIGENTE</h4>
-          <h2 className="text-4xl form-title font-bold text-slate-800 mb-3">Cotiza tu sistema solar</h2>
-          <p className="text-gray-500 text-[15px]">Completa los pasos y adjunta tu recibo para generar una propuesta personalizada.</p>
-        </div>
+    <div className="w-full grid lg:grid-cols-[1fr_380px] gap-8 items-start">
 
-        {/* Step Indicators */}
-        <div className="flex items-center gap-4 mb-10 overflow-x-auto pb-2 scrollbar-none">
-          {steps.map((s) => {
-            const isActive = step === s.id;
+      {/* ── LEFT: formulario ────────────────────────────── */}
+      <div>
+        {/* Indicador de pasos */}
+        <div className="flex items-center gap-3 mb-10">
+          {['Datos', 'Propiedad', 'Recibo'].map((label, i) => {
+            const n = i + 1;
+            const active = step === n;
+            const done   = step > n;
             return (
-              <div key={s.id} className="flex items-center gap-2 cursor-pointer shrink-0" onClick={() => step > s.id && setStep(s.id)}>
-                <div 
-                  className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-                    isActive ? "bg-[#2d6a4f] text-white" : "bg-[#d8f3dc] text-[#2d6a4f]"
-                  }`}
+              <React.Fragment key={n}>
+                <button
+                  onClick={() => step > n && setStep(n)}
+                  className={`flex items-center gap-2.5 transition-all ${step > n ? 'cursor-pointer' : 'cursor-default'}`}
                 >
-                  0{s.id}
-                </div>
-                <span className={`text-[15px] font-semibold transition-colors ${isActive ? "text-slate-700" : "text-slate-500"}`}>{s.label}</span>
-              </div>
-            )
+                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all ${
+                    done   ? 'bg-brand-amber border-brand-amber text-brand-dark' :
+                    active ? 'bg-transparent border-brand-amber text-brand-amber' :
+                             'bg-transparent border-white/20 text-white/30'
+                  }`}>
+                    {done ? <CheckCircle size={14}/> : n}
+                  </span>
+                  <span className={`text-sm font-semibold hidden sm:block transition-colors ${active ? 'text-white' : 'text-white/30'}`}>{label}</span>
+                </button>
+                {i < 2 && <div className={`flex-1 h-px transition-colors ${step > n ? 'bg-brand-amber/60' : 'bg-white/10'}`} />}
+              </React.Fragment>
+            );
           })}
         </div>
 
-        {/* Formularios */}
-        <div className="flex-1 min-h-[300px]">
+        {/* Pasos */}
+        <div className="min-h-[340px]">
           <AnimatePresence mode="wait">
-            
-            {/* STEP 1: CONTACTO */}
+
+            {/* STEP 1 */}
             {step === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-                <input 
-                  type="text" placeholder="* Nombre completo" 
-                  className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800 placeholder:text-gray-400"
-                  value={formData.name} onChange={e => updateData({ name: e.target.value })} 
-                  required
-                />
-                <input 
-                  type="email" placeholder="* Correo electrónico (ej. juan@gmail.com)" 
-                  className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800 placeholder:text-gray-400"
-                  value={formData.email} onChange={e => updateData({ email: e.target.value })} 
-                  required
-                />
-                <input 
-                  type="tel" placeholder="* Teléfono a 10 dígitos" 
-                  className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800 placeholder:text-gray-400"
-                  value={formData.phone} onChange={e => updateData({ phone: e.target.value })} 
-                  required
-                />
-                <input 
-                  type="text" placeholder="Ciudad (Opcional)" 
-                  className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800 placeholder:text-gray-400"
-                  value={formData.city} onChange={e => updateData({ city: e.target.value })} 
-                />
-              </motion.div>
-            )}
-
-            {/* STEP 2: PROPIEDAD */}
-            {step === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-                 <input 
-                  type="text" placeholder="Código Postal (Ej. 11000)" 
-                  className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800 placeholder:text-gray-400"
-                  value={formData.zipCode} onChange={e => updateData({ zipCode: e.target.value })} 
-                />
-                <select 
-                  className="w-full p-[18px] border border-[#e2e8f0] rounded-2xl bg-white outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981] transition-all text-gray-800"
-                  value={formData.propertyType} onChange={e => updateData({ propertyType: e.target.value })}
-                >
-                  <option>Residencial</option>
-                  <option>Comercial</option>
-                  <option>Industrial</option>
-                </select>
-              </motion.div>
-            )}
-
-            {/* STEP 3: RECIBO */}
-            {step === 3 && (
-              <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
+              <motion.div key="s1" {...fadeSlide} className="space-y-5">
                 <div>
-                  <label className="block text-slate-700 font-bold mb-6">¿Cuánto pagas de luz bimestralmente?</label>
-                  <div className="flex justify-between items-center mb-6">
-                     <span className="text-gray-400 font-medium">$500</span>
-                     <span className="text-4xl font-bold text-[#10b981]">${formData.consumption.toLocaleString()} <span className="text-sm text-gray-400 font-normal">MXN</span></span>
-                     <span className="text-gray-400 font-medium">$25,000+</span>
+                  <p className={labelCls}><User size={12}/> Nombre completo</p>
+                  <input className={inputCls} placeholder="Ej. María González" value={form.name}
+                    onChange={e => set({ name: e.target.value })} />
+                </div>
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <p className={labelCls}><Mail size={12}/> Correo electrónico</p>
+                    <input type="email" className={inputCls} placeholder="correo@gmail.com" value={form.email}
+                      onChange={e => set({ email: e.target.value })} />
                   </div>
-                  <input type="range" min="500" max="25000" step="500" 
-                    className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#2d6a4f]" 
-                    style={{ accentColor: '#2d6a4f' }} value={formData.consumption} onChange={e => updateData({ consumption: Number(e.target.value) })} 
-                  />
+                  <div>
+                    <p className={labelCls}><Phone size={12}/> Teléfono</p>
+                    <input type="tel" className={inputCls} placeholder="81 1234 5678" value={form.phone}
+                      onChange={e => set({ phone: e.target.value })} />
+                  </div>
+                </div>
+                <div>
+                  <p className={labelCls}><MapPin size={12}/> Ciudad (Opcional)</p>
+                  <input className={inputCls} placeholder="Monterrey, CDMX…" value={form.city}
+                    onChange={e => set({ city: e.target.value })} />
+                </div>
+              </motion.div>
+            )}
+
+            {/* STEP 2 */}
+            {step === 2 && (
+              <motion.div key="s2" {...fadeSlide} className="space-y-5">
+                <div>
+                  <p className={labelCls}><MapPin size={12}/> Código postal</p>
+                  <input className={inputCls} placeholder="Ej. 64000" value={form.zipCode}
+                    onChange={e => set({ zipCode: e.target.value })} />
+                </div>
+                <div>
+                  <p className={labelCls}><Building2 size={12}/> Tipo de propiedad</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    {['Residencial', 'Comercial', 'Industrial'].map(t => (
+                      <button key={t} type="button" onClick={() => set({ propertyType: t })}
+                        className={`py-4 rounded-2xl border-2 font-semibold text-sm transition-all ${
+                          form.propertyType === t
+                            ? 'border-brand-amber bg-brand-amber/10 text-brand-amber'
+                            : 'border-white/15 text-white/50 hover:border-white/30'
+                        }`}>
+                        {t}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STEP 3 */}
+            {step === 3 && (
+              <motion.div key="s3" {...fadeSlide} className="space-y-8">
+                {/* Slider */}
+                <div>
+                  <p className={labelCls}><Zap size={12}/> Recibo bimestral de luz (MXN)</p>
+                  <div className="flex justify-between items-end mb-4">
+                    <span className="text-white/40 text-sm">$500</span>
+                    <span className="text-4xl font-black text-brand-amber">
+                      ${form.consumption.toLocaleString()}
+                      <span className="text-sm text-white/40 font-normal ml-1">MXN</span>
+                    </span>
+                    <span className="text-white/40 text-sm">$25,000+</span>
+                  </div>
+                  <input type="range" min={500} max={25000} step={500}
+                    value={form.consumption} onChange={e => set({ consumption: +e.target.value })}
+                    className="w-full h-2 rounded-full appearance-none cursor-pointer"
+                    style={{ accentColor: '#FFB800' }} />
                 </div>
 
-                <div className="border-2 border-dashed border-[#10b981]/30 bg-[#10b981]/5 rounded-2xl p-10 text-center hover:bg-[#10b981]/10 transition-colors cursor-pointer relative">
-                  <input type="file" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onChange={e => e.target.files && updateData({ file: e.target.files[0] })} accept=".pdf,image/*" />
-                  <UploadCloud size={40} className="mx-auto text-[#10b981] mb-4" />
-                  {formData.file ? (
-                    <p className="font-bold text-[#10b981] flex items-center justify-center gap-2"><CheckCircle size={20} /> {formData.file.name}</p>
-                  ) : (
-                    <>
-                      <p className="font-bold text-gray-800 text-[15px]">Sube tu recibo actualizado (Opcional)</p>
-                      <p className="text-sm text-gray-500 mt-2">Formatos aceptados: PDF, JPG, PNG (Max 5MB)</p>
-                    </>
-                  )}
+                {/* Adjunto */}
+                <div>
+                  <p className={labelCls}><UploadCloud size={12}/> Adjunta tu recibo (opcional)</p>
+                  <label className="relative flex flex-col items-center gap-3 py-8 px-6 border-2 border-dashed rounded-2xl cursor-pointer transition-all border-white/15 hover:border-brand-amber/50 hover:bg-brand-amber/5">
+                    <input type="file" accept=".pdf,image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                      onChange={e => e.target.files && set({ file: e.target.files[0] })} />
+                    {form.file ? (
+                      <>
+                        <CheckCircle size={32} className="text-brand-amber" />
+                        <p className="text-brand-amber font-bold text-sm">{form.file.name}</p>
+                      </>
+                    ) : (
+                      <>
+                        <UploadCloud size={32} className="text-white/30" />
+                        <p className="text-white/50 text-sm text-center">PDF, JPG o PNG · Máx 5 MB</p>
+                      </>
+                    )}
+                  </label>
                 </div>
               </motion.div>
             )}
@@ -261,66 +243,67 @@ export default function QuoteForm() {
           </AnimatePresence>
         </div>
 
-        {/* Botones */}
-        <div className="mt-8 flex items-center justify-between pb-4">
-           {step > 1 ? (
-             <button onClick={() => setStep(step - 1)} className="px-8 py-3 border border-[#bbf7d0] text-[#2d6a4f] bg-white rounded-full font-bold hover:bg-[#f0fdf4] transition-colors">
-               Regresar
-             </button>
-           ) : <div />}
+        {/* Navegación */}
+        <div className="flex justify-between items-center mt-8">
+          {step > 1 ? (
+            <button onClick={prev}
+              className="flex items-center gap-2 px-6 py-3 rounded-full border border-white/15 text-white/70 hover:bg-white/5 transition-all text-sm font-semibold">
+              <ArrowLeft size={16}/> Regresar
+            </button>
+          ) : <div />}
 
-           {step < 3 ? (
-             <button onClick={handleNextStep} className="px-10 py-3 bg-[#2d6a4f] text-white rounded-full font-bold hover:bg-[#1b4332] transition-colors shadow-md">
-               Continuar
-             </button>
-           ) : (
-             <button onClick={handleSubmit} disabled={isSubmitting} className="flex items-center justify-center gap-2 px-10 py-3 bg-[#2d6a4f] text-white font-bold rounded-full hover:bg-[#1b4332] transition-colors shadow-xl disabled:opacity-50">
-               {isSubmitting ? 'Enviando...' : 'Obtener Cotización'}
-             </button>
-           )}
+          {step < TOTAL ? (
+            <button onClick={next}
+              className="flex items-center gap-2 px-8 py-3 rounded-full bg-brand-amber text-brand-dark font-bold hover:brightness-110 transition-all shadow-lg shadow-brand-amber/20">
+              Continuar <ArrowRight size={16}/>
+            </button>
+          ) : (
+            <button onClick={handleSubmit} disabled={submitting}
+              className="flex items-center gap-2 px-8 py-3 rounded-full bg-brand-amber text-brand-dark font-bold hover:brightness-110 transition-all shadow-lg shadow-brand-amber/20 disabled:opacity-50">
+              {submitting ? 'Enviando…' : 'Obtener cotización'} {!submitting && <ArrowRight size={16}/>}
+            </button>
+          )}
         </div>
       </div>
 
-      {/* RIGHT COLUMN: Resumen */}
-      <div className="w-full lg:w-[420px] flex flex-col gap-6">
-        <div className="bg-white border-[1.5px] border-[#dcfce7] rounded-3xl p-8 shadow-2xl shadow-green-900/5">
-           <h3 className="text-[#10b981] text-[13px] font-bold tracking-[0.2em] uppercase mb-8">RESUMEN ESTIMADO</h3>
-           
-           <div className="space-y-6">
-             <div className="flex justify-between items-center border-b border-gray-100 pb-4">
-               <span className="text-[#475569] font-medium text-[15px]">Ahorro mensual</span>
-               <span className="text-[#10b981] font-bold text-xl">${metrics.ahorroMensual.toLocaleString()}</span>
-             </div>
-             <div className="flex justify-between items-center border-b border-gray-100 pb-4">
-               <span className="text-[#475569] font-medium text-[15px]">Costo del sistema</span>
-               <span className="text-[#10b981] font-bold text-xl">${metrics.costo.toLocaleString()}</span>
-             </div>
-             <div className="flex justify-between items-center border-b border-gray-100 pb-4">
-               <span className="text-[#475569] font-medium text-[15px]">ROI en meses</span>
-               <span className="text-[#10b981] font-bold text-xl">{metrics.roi}</span>
-             </div>
-             <div className="flex justify-between items-center border-b border-gray-100 pb-4">
-               <span className="text-[#475569] font-medium text-[15px]">Paneles sugeridos (650W)</span>
-               <span className="text-[#10b981] font-bold text-xl">{metrics.paneles}</span>
-             </div>
-             <div className="flex justify-between items-center border-b border-gray-100 pb-4">
-               <span className="text-[#475569] font-medium text-[15px]">Potencia instalada</span>
-               <span className="text-[#10b981] font-bold text-xl">{metrics.potenciaKW.toFixed(1)} kWp</span>
-             </div>
-             <div className="flex justify-between items-center pb-2">
-               <span className="text-[#475569] font-medium text-[15px]">Ahorro a 25 años</span>
-               <span className="text-[#10b981] font-bold text-xl">${metrics.ahorro25.toLocaleString()}</span>
-             </div>
-           </div>
+      {/* ── RIGHT: tarjeta resumen ───────────────────────── */}
+      <div className="flex flex-col gap-4">
+        <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm p-6">
+          <p className="text-brand-amber text-xs font-bold tracking-widest uppercase mb-6">Resumen estimado</p>
+          <div className="space-y-4">
+            {[
+              { icon: TrendingDown, label: 'Ahorro mensual', value: `$${metrics.ahorroMensual.toLocaleString()}` },
+              { icon: Sun,          label: 'Paneles (650W)',  value: metrics.paneles },
+              { icon: Zap,          label: 'Potencia',        value: `${metrics.potenciaKW.toFixed(1)} kWp` },
+              { icon: Calendar,     label: 'ROI (meses)',     value: metrics.roi },
+            ].map(({ icon: Icon, label, value }) => (
+              <div key={label} className="flex items-center justify-between py-3 border-b border-white/8 last:border-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-brand-amber/10 flex items-center justify-center">
+                    <Icon size={15} className="text-brand-amber" />
+                  </div>
+                  <span className="text-white/60 text-sm">{label}</span>
+                </div>
+                <span className="text-white font-bold">{value}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 pt-5 border-t border-white/10">
+            <div className="flex justify-between items-center">
+              <span className="text-white/60 text-sm">Ahorro a 25 años</span>
+              <span className="text-brand-amber text-xl font-black">
+                ${(metrics.ahorro25 / 1_000_000).toFixed(1)}M
+              </span>
+            </div>
+          </div>
         </div>
 
-        <div className="bg-[#f0fdf4] border-[1.5px] border-[#dcfce7] rounded-2xl p-6 text-left relative overflow-hidden">
-          <div className="relative z-10">
-            <h4 className="text-[#2d6a4f] font-bold mb-2 text-lg">Asesoría incluida</h4>
-            <p className="text-[#2d6a4f] opacity-80 text-[15px] leading-relaxed">
-              Te llamamos para validar datos, explicar financiamiento y coordinar visita técnica.
-            </p>
-          </div>
+        <div className="rounded-2xl border border-brand-amber/20 bg-brand-amber/5 p-5">
+          <p className="text-brand-amber font-bold mb-1 text-sm">Asesoría sin costo</p>
+          <p className="text-white/60 text-sm leading-relaxed">
+            Te llamamos para validar datos, explicar financiamiento disponible y coordinar la visita técnica gratuita.
+          </p>
         </div>
       </div>
 

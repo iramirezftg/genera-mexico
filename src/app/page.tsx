@@ -16,7 +16,7 @@ import Testimonials from '../components/Testimonials';
 import PhotoGallery from '../components/PhotoGallery';
 import ProcessSection from '../components/ProcessSection';
 import FAQSection from '../components/FAQSection';
-import SimpleContactForm from '../components/SimpleContactForm';
+
 import Footer from '../components/Footer';
 import SavingsSimulator from '../components/SavingsSimulator';
 import Header from '../components/Header';
@@ -190,16 +190,19 @@ export default function LandingPage() {
       {/* 6. PREGUNTAS FRECUENTES (FAQ) */}
       <FAQSection />
 
-      {/* 7. FORMULARIO DE CONTACTO DIRECTO */}
-      <SimpleContactForm />
+      {/* 7. COTIZADOR INTERACTIVO */}
+      <section id="simulador" className="py-24 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #082336 0%, #1E4620 60%, #082336 100%)' }}>
+        {/* Orbes decorativos */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #FFB800, transparent)' }} />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #1E4620, transparent)' }} />
 
-      {/* 8. COTIZADOR INTERACTIVO (WIZARD) */}
-      <section id="simulador" className="py-24 bg-slate-50 border-t border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 text-center mb-12">
-          <h2 className="text-4xl font-bold text-brand-dark mb-4">Descubre tu ahorro exacto</h2>
-          <p className="text-lg text-gray-600">Completa estos 4 sencillos pasos para recibir tu propuesta personalizada sin compromiso.</p>
-        </div>
-        <div className="px-4">
+        <div className="relative max-w-6xl mx-auto px-4">
+          {/* Encabezado */}
+          <div className="text-center mb-14">
+            <p className="text-brand-amber text-xs font-bold tracking-[0.25em] uppercase mb-4">Cotización Inteligente</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Descubre cuánto puedes ahorrar</h2>
+            <p className="text-white/60 text-lg max-w-xl mx-auto">Completa los pasos y recibe una propuesta personalizada sin compromiso — en menos de 24 horas.</p>
+          </div>
           <QuoteForm />
         </div>
       </section>
