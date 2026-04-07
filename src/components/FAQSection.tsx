@@ -15,7 +15,7 @@ const faqs = [
   },
   {
     q: "¿Cómo es el financiamiento?",
-    a: "Ofrecemos planes flexibles y asesoría para que pagues tu sistema sin afectar tu flujo de efectivo. ¡La mensualidad del financiamiento suele ser menor a lo que ya le pagas a CFE!"
+    a: "Puedes pagar tu sistema hasta en 12 meses con tarjeta de crédito, instalando de inmediato y distribuyendo la inversión en mensualidades. Una opción práctica para comenzar a ahorrar desde el primer mes."
   }
 ];
 
