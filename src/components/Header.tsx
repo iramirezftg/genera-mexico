@@ -54,7 +54,7 @@ export default function Header() {
             ))}
 
             <a
-              href="#contacto"
+              href="#simulador"
               className="bg-brand-amber text-brand-dark px-6 py-2.5 rounded-full font-bold text-sm tracking-wide shadow-md hover:scale-105 transition-transform"
             >
               Cotizar Ahora
@@ -91,7 +91,7 @@ export default function Header() {
           ))}
 
           <a
-            href="#contacto"
+            href="#simulador"
             onClick={() => setIsMobileMenuOpen(false)}
             className="bg-brand-amber text-brand-dark px-4 py-3 rounded-xl font-bold text-center mt-2 shadow-sm"
           >
