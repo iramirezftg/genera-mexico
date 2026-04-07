@@ -27,7 +27,7 @@ export default function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-24 bg-white scroll-mt-24">
+    <section id="faq" className="py-24 bg-white dark:bg-slate-900 scroll-mt-24 transition-colors duration-500">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="mb-12">
@@ -38,7 +38,7 @@ export default function FAQSection() {
             transition={{ duration: 0.6 }}
           >
             <p className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2">Preguntas Frecuentes</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-brand-dark">Aclara tus dudas antes de instalar</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-brand-dark dark:text-white">Aclara tus dudas antes de instalar</h2>
           </motion.div>
         </div>
 
@@ -52,17 +52,17 @@ export default function FAQSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className="border-b border-gray-200"
+                className="border-b border-gray-200 dark:border-slate-800"
               >
                 <button
                   onClick={() => toggleFaq(idx)}
                   className="w-full py-6 flex items-center justify-between text-left focus:outline-none group"
                 >
-                  <span className="text-lg font-bold text-brand-dark group-hover:text-brand-green transition-colors">
+                  <span className="text-lg font-bold text-brand-dark dark:text-gray-200 group-hover:text-brand-green transition-colors">
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`text-gray-400 transition-transform duration-300 ${
+                    className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 ${
                       isOpen ? "rotate-180 text-brand-green" : ""
                     }`}
                     size={24}
@@ -77,7 +77,7 @@ export default function FAQSection() {
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <p className="pb-6 text-gray-500 leading-relaxed pr-12">
+                      <p className="pb-6 text-gray-500 dark:text-gray-400 leading-relaxed pr-12">
                         {faq.a}
                       </p>
                     </motion.div>

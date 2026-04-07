@@ -28,7 +28,7 @@ const processSteps = [
 
 export default function ProcessSection() {
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-24 bg-white dark:bg-slate-900 relative transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="mb-16">
@@ -39,7 +39,7 @@ export default function ProcessSection() {
             transition={{ duration: 0.6 }}
           >
             <p className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2">Proceso Genera</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-brand-dark">De recibo a energía solar en 4 pasos</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-brand-dark dark:text-white">De recibo a energía solar en 4 pasos</h2>
           </motion.div>
         </div>
 
@@ -51,13 +51,13 @@ export default function ProcessSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.15 }}
-              className="bg-white border border-gray-100 p-8 rounded-3xl hover:shadow-xl hover:shadow-brand-green/5 transition-all duration-300 relative group"
+              className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 p-8 rounded-3xl hover:shadow-xl hover:shadow-brand-green/5 dark:hover:shadow-none transition-all duration-300 relative group"
             >
-              <div className="w-12 h-12 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green font-bold text-lg mb-6 group-hover:bg-brand-green group-hover:text-white transition-colors duration-300">
+              <div className="w-12 h-12 rounded-full bg-brand-green/10 dark:bg-brand-green/20 flex items-center justify-center text-brand-green font-bold text-lg mb-6 group-hover:bg-brand-green group-hover:text-white transition-colors duration-300">
                 {step.num}
               </div>
-              <h3 className="text-xl font-bold text-brand-dark mb-4">{step.title}</h3>
-              <p className="text-gray-500 leading-relaxed text-sm md:text-base">
+              <h3 className="text-xl font-bold text-brand-dark dark:text-gray-100 mb-4">{step.title}</h3>
+              <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm md:text-base">
                 {step.desc}
               </p>
             </motion.div>

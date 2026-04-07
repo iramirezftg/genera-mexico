@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import GeneraLogo from './GeneraLogo';
 import { Menu, X } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -26,7 +27,7 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-2' : 'bg-transparent py-4'
+        isScrolled ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm py-2' : 'bg-transparent py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,12 +47,14 @@ export default function Header() {
                 key={link.name}
                 href={link.href}
                 className={`text-sm font-semibold tracking-wide transition-colors ${
-                  isScrolled ? 'text-gray-600 hover:text-brand-green' : 'text-white/90 hover:text-white drop-shadow-sm'
+                  isScrolled ? 'text-gray-600 dark:text-gray-300 hover:text-brand-green' : 'text-white/90 hover:text-white drop-shadow-sm'
                 }`}
               >
                 {link.name}
               </a>
             ))}
+
+            <ThemeToggle />
 
             <a
               href="#simulador"
@@ -78,17 +81,21 @@ export default function Header() {
 
       {/* Mobile Nav Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 py-4 px-4 flex flex-col gap-4">
+        <div className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-900 shadow-xl border-t border-gray-100 dark:border-white/10 py-4 px-4 flex flex-col gap-4">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-gray-600 font-semibold p-2 rounded-lg hover:bg-gray-50"
+              className="text-gray-600 dark:text-gray-300 font-semibold p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800"
             >
               {link.name}
             </a>
           ))}
+
+          <div className="flex justify-center mt-2">
+            <ThemeToggle />
+          </div>
 
           <a
             href="#simulador"

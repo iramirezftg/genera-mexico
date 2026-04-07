@@ -43,12 +43,12 @@ const BenefitCard = ({ icon, title, desc, index = 0 }: { icon: React.ReactNode; 
     className="h-full"
   >
     <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} scale={1.02} className="w-full h-full">
-      <div className="p-8 bg-white border border-gray-100 shadow-xl rounded-2xl h-full transition-shadow hover:shadow-2xl">
+      <div className="p-8 bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-xl rounded-2xl h-full transition-shadow hover:shadow-2xl">
         <div className="flex items-center justify-center w-14 h-14 mb-6 rounded-full bg-brand-green/10 text-brand-green">
           {icon}
         </div>
-        <h3 className="mb-3 text-xl font-bold text-gray-900">{title}</h3>
-        <p className="text-gray-600 leading-relaxed">{desc}</p>
+        <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-gray-100">{title}</h3>
+        <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{desc}</p>
       </div>
     </Tilt>
   </motion.div>
@@ -168,8 +168,8 @@ export default function LandingPage() {
       {/* 3. BENEFICIOS (3D Tilt) */}
       <section id="beneficios" className="py-24 max-w-6xl mx-auto px-4 scroll-mt-24">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-brand-dark mb-4">¿Por qué elegir Genera México?</h2>
-          <p className="text-gray-600 text-lg">La transición a energía solar más segura y rentable.</p>
+          <h2 className="text-4xl font-bold text-brand-dark dark:text-white mb-4">¿Por qué elegir Genera México?</h2>
+          <p className="text-gray-600 dark:text-gray-300 text-lg">La transición a energía solar más segura y rentable.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <BenefitCard index={0} icon={<Zap size={28} />} title="Ahorro Inmediato" desc="Reduce hasta un 98% tu pago a CFE desde el primer bimestre de instalación." />

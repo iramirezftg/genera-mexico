@@ -51,25 +51,25 @@ export default function SavingsSimulator() {
   }, [recibo]);
 
   return (
-    <section id="calculadora" className="py-24 bg-white scroll-mt-24">
+    <section id="calculadora" className="py-24 bg-white dark:bg-slate-900 scroll-mt-24 transition-colors duration-500">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-white border-2 border-green-50 rounded-3xl p-8 md:p-12 shadow-xl shadow-brand-green/5 flex flex-col lg:flex-row gap-12 items-center"
+          className="bg-white dark:bg-slate-800 border-2 border-green-50 dark:border-slate-700 rounded-3xl p-8 md:p-12 shadow-xl shadow-brand-green/5 dark:shadow-none flex flex-col lg:flex-row gap-12 items-center transition-colors duration-500"
         >
           
           {/* Controles del Simulador */}
           <div className="w-full lg:w-5/12">
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">Calcula tu ahorro en segundos</h2>
-            <p className="text-gray-500 mb-8">Ajusta tu recibo mensual y descubre el impacto real en tu economía.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-dark dark:text-white mb-4">Calcula tu ahorro en segundos</h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-8">Ajusta tu recibo mensual y descubre el impacto real en tu economía.</p>
             
-            <div className="bg-brand-green/5 rounded-2xl p-6 border border-brand-green/10">
+            <div className="bg-brand-green/5 dark:bg-brand-green/10 rounded-2xl p-6 border border-brand-green/10 dark:border-brand-green/20">
               <div className="flex justify-between items-center mb-6">
                 <label className="text-sm font-bold tracking-widest text-brand-green uppercase">Tu Recibo Mensual</label>
-                <div className="bg-white px-4 py-2 rounded-lg border border-gray-200 font-bold text-gray-800">
-                  <span className="text-gray-400 mr-1">$</span>
+                <div className="bg-white dark:bg-slate-700 px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-600 font-bold text-gray-800 dark:text-white transition-colors">
+                  <span className="text-gray-400 dark:text-gray-300 mr-1">$</span>
                   <input 
                     type="number" 
                     value={recibo}
@@ -115,7 +115,7 @@ function ResultCard({ title, value, index }: { title: string, value: string, ind
       viewport={{ once: true }}
       whileHover={{ scale: 1.05, y: -5 }}
       transition={{ type: "spring", stiffness: 300, damping: 20, delay: index * 0.1 }}
-      className="border border-green-100 rounded-xl p-6 bg-white shadow-sm hover:shadow-lg hover:border-brand-green/30"
+      className="border border-green-100 dark:border-slate-700 rounded-xl p-6 bg-white dark:bg-slate-700/50 shadow-sm hover:shadow-lg hover:border-brand-green/30 dark:hover:border-brand-green/50 transition-all duration-300"
     >
       <h4 className="text-xs font-bold text-gray-400 tracking-wider uppercase mb-2">{title}</h4>
       <p className="text-2xl font-bold text-brand-green">{value}</p>

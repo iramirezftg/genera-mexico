@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@custom-variant dark (&:is(.dark *));
 :root {
   --background: #ffffff;
   --foreground: #1E293B;
@@ -23,11 +23,9 @@
   100% { transform: translateX(200%) skewX(-15deg); }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #f8fafc;
-  }
+.dark {
+  --background: #082336;
+  --foreground: #f8fafc;
 }
 
 body {
