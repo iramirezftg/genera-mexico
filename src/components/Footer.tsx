@@ -40,7 +40,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="text-gray-500">+52 81 1206 3766</li>
               <li>
-                <a href="mailto:hola@genera.mx" className="text-gray-500 hover:text-brand-green transition-colors">hola@genera.mx</a>
+                <a href="mailto:ventas@generamexico.com" className="text-gray-500 hover:text-brand-green transition-colors">ventas@generamexico.com</a>
               </li>
               <li className="text-gray-500">Monterrey • CDMX</li>
             </ul>
