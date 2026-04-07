@@ -136,21 +136,21 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={inViewStats ? { opacity: 1, scale: 1 } : {}} transition={{ duration: 0.5 }}>
             <h2 className="text-5xl font-bold text-brand-amber">
-              {inViewStats && <CountUp end={500} duration={3} />}+
+              +{inViewStats && <CountUp end={500} duration={3} />}
             </h2>
-            <p className="mt-2 text-lg">Proyectos Completados</p>
+            <p className="mt-2 text-lg">Clientes Atendidos</p>
           </motion.div>
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={inViewStats ? { opacity: 1, scale: 1 } : {}} transition={{ duration: 0.5, delay: 0.2 }}>
             <h2 className="text-5xl font-bold text-brand-amber">
-              ${inViewStats && <CountUp end={10} duration={3} />}M
+              +$<span>{inViewStats && <CountUp end={100} duration={3} />}</span> millones MXN
             </h2>
-            <p className="mt-2 text-lg">Ahorrados por clientes (MXN)</p>
+            <p className="mt-2 text-lg">Ahorro Generado</p>
           </motion.div>
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={inViewStats ? { opacity: 1, scale: 1 } : {}} transition={{ duration: 0.5, delay: 0.4 }}>
             <h2 className="text-5xl font-bold text-brand-amber">
-              {inViewStats && <CountUp end={100} duration={3} />}%
+              +{inViewStats && <CountUp end={10000} duration={3} separator="," />}
             </h2>
-            <p className="mt-2 text-lg">Energía Limpia</p>
+            <p className="mt-2 text-lg">Paneles Instalados</p>
           </motion.div>
         </div>
       </section>
