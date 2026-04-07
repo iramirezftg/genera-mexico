@@ -141,10 +141,11 @@ export default function LandingPage() {
             <p className="mt-2 text-lg">Clientes Atendidos</p>
           </motion.div>
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={inViewStats ? { opacity: 1, scale: 1 } : {}} transition={{ duration: 0.5, delay: 0.2 }}>
-            <h2 className="text-5xl font-bold text-brand-amber">
-              +$<span>{inViewStats && <CountUp end={100} duration={3} />}</span> millones MXN
+            <h2 className="text-5xl font-bold text-brand-amber leading-tight">
+              +${inViewStats && <CountUp end={100} duration={3} />}M
             </h2>
-            <p className="mt-2 text-lg">Ahorro Generado</p>
+            <p className="text-sm font-semibold text-brand-amber/70 mt-1">millones MXN</p>
+            <p className="mt-1 text-lg">Ahorro Generado</p>
           </motion.div>
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={inViewStats ? { opacity: 1, scale: 1 } : {}} transition={{ duration: 0.5, delay: 0.4 }}>
             <h2 className="text-5xl font-bold text-brand-amber">
