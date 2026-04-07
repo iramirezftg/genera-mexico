@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { supabase } from '@/lib/supabaseClient';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const DESTINATION_EMAIL = 'israplenitud@gmail.com';
@@ -9,57 +8,29 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
 
-    const name        = formData.get('name')         as string;
-    const phone       = formData.get('phone')        as string;
-    const email       = formData.get('email')        as string;
-    const zipCode     = formData.get('zipCode')      as string; // ciudad
-    const propertyType = formData.get('propertyType') as string;
-    const consumption = Number(formData.get('consumption'));
-    const file        = formData.get('file')         as File | null;
+    const name         = formData.get('name')          as string;
+    const phone        = formData.get('phone')         as string;
+    const email        = formData.get('email')         as string;
+    const zipCode      = formData.get('zipCode')       as string; // ciudad
+    const propertyType = formData.get('propertyType')  as string;
+    const consumption  = Number(formData.get('consumption'));
+    const file         = formData.get('file')          as File | null;
 
-    let bill_file_url = null;
+    // ── Leer el archivo adjunto (si existe) ────────────
+    type ResendAttachment = { filename: string; content: Buffer };
+    const attachments: ResendAttachment[] = [];
 
-    // ── 1. Subir archivo a Supabase (si viene) ─────────
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
-                     ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (process.env.NEXT_PUBLIC_SUPABASE_URL && supabaseKey && file) {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const { error: uploadError } = await supabase.storage
-        .from('recibos_cfe')
-        .upload(fileName, file);
-
-      if (!uploadError) {
-        const { data: urlData } = supabase.storage
-          .from('recibos_cfe')
-          .getPublicUrl(fileName);
-        bill_file_url = urlData.publicUrl;
-      }
+    if (file && file.size > 0) {
+      const buffer = Buffer.from(await file.arrayBuffer());
+      attachments.push({ filename: file.name, content: buffer });
     }
 
-    // ── 2. Guardar lead en Supabase ────────────────────
-    if (process.env.NEXT_PUBLIC_SUPABASE_URL && supabaseKey) {
-      const { error: insertError } = await supabase
-        .from('leads')
-        .insert([{
-          name, email, phone,
-          zip_code: zipCode,
-          property_type: propertyType,
-          monthly_consumption: consumption,
-          bill_file_url,
-        }]);
-
-      if (insertError) {
-        console.warn('Supabase insert error:', insertError.message);
-      }
-    }
-
-    // ── 3. Enviar email de notificación con Resend ─────
+    // ── Enviar email via Resend ─────────────────────────
     const { error: emailError } = await resend.emails.send({
       from: 'Genera México <onboarding@resend.dev>',
       to: DESTINATION_EMAIL,
       subject: `🌞 Nuevo lead: ${name}`,
+      attachments,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:auto;padding:32px;background:#f9fafb;border-radius:12px;">
           <div style="background:#1E4620;padding:24px;border-radius:8px 8px 0 0;text-align:center;">
@@ -96,12 +67,15 @@ export async function POST(request: Request) {
                 <td style="padding:12px 8px;font-weight:600;color:#FFB800;font-size:18px;">$${consumption.toLocaleString('es-MX')} MXN</td>
               </tr>
             </table>
-            ${bill_file_url ? `
+
+            ${attachments.length > 0 ? `
             <div style="margin-top:20px;padding:16px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;">
-              <p style="margin:0;font-size:14px;color:#166534;">📎 Recibo adjunto: 
-                <a href="${bill_file_url}" style="color:#1E4620;font-weight:600;">Ver archivo</a>
-              </p>
-            </div>` : ''}
+              <p style="margin:0;font-size:14px;color:#166534;">📎 Recibo adjunto: <strong>${file!.name}</strong></p>
+            </div>` : `
+            <div style="margin-top:20px;padding:16px;background:#fffbeb;border-radius:8px;border:1px solid #fde68a;">
+              <p style="margin:0;font-size:14px;color:#92400e;">📋 No se adjuntó recibo de luz</p>
+            </div>`}
+
             <div style="margin-top:24px;padding:16px;background:#fffbeb;border-radius:8px;border:1px solid #fde68a;text-align:center;">
               <p style="margin:0;font-size:13px;color:#92400e;">⏰ Contactar en menos de 24 horas para máxima conversión</p>
             </div>
@@ -115,10 +89,10 @@ export async function POST(request: Request) {
 
     if (emailError) {
       console.error('Resend error:', emailError);
-      // Aun así devolvemos éxito si el lead se guardó
+      return NextResponse.json({ error: 'No se pudo enviar el correo', detail: emailError }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, emailSent: !emailError });
+    return NextResponse.json({ success: true, emailSent: true });
 
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'Error desconocido';

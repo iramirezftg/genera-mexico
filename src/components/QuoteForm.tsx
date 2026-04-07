@@ -244,7 +244,7 @@ export default function QuoteForm() {
                 </div>
 
                 <div className="border-2 border-dashed border-[#10b981]/30 bg-[#10b981]/5 rounded-2xl p-10 text-center hover:bg-[#10b981]/10 transition-colors cursor-pointer relative">
-                  <input type="file" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onChange={e => e.target.files && updateData({ file: e.target.files[0] })} accept=".pdf,image/*" />
+                  <input type="file" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onChange={e => e.target.files && updateData({ file: e.target.files[0] })} accept=".pdf,image/*" />
                   <UploadCloud size={40} className="mx-auto text-[#10b981] mb-4" />
                   {formData.file ? (
                     <p className="font-bold text-[#10b981] flex items-center justify-center gap-2"><CheckCircle size={20} /> {formData.file.name}</p>
