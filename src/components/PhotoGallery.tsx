@@ -159,18 +159,7 @@ export default function PhotoGallery() {
       {/* Fila 2: derecha ← (sentido opuesto) */}
       <TickerRow items={row2} direction="right" speed={30} onOpen={setSelectedPhoto} />
 
-      {/* CTA contador */}
-      <div className="max-w-6xl mx-auto px-4 mt-12 flex justify-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="inline-flex items-center gap-3 bg-brand-green/5 border border-brand-green/20 rounded-full px-6 py-3"
-        >
-          <span className="text-2xl font-black text-brand-green">18+</span>
-          <span className="text-gray-600 text-sm font-medium">proyectos documentados — haz clic para ver en detalle</span>
-        </motion.div>
-      </div>
+
 
       {/* ─── Lightbox ─── */}
       <AnimatePresence>
