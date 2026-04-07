@@ -6,7 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // ⚠️ Con plan gratuito de Resend (sin dominio verificado)
 // solo se puede enviar al email con el que se registró la cuenta.
 // Cambia esto a tu email de Resend o verifica un dominio en resend.com/domains
-const DESTINATION_EMAIL = 'edgarhvalencia@gmail.com';
+const DESTINATION_EMAIL = 'ventas@generamexico.com';
 
 export async function POST(request: Request) {
   try {
