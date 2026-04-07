@@ -32,8 +32,8 @@ export default function ThemeToggle() {
         animate={{ width: isDark ? "100%" : "0%" }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
       />
-      <div className="flex w-full items-center justify-between z-10 px-1 relative">
-        <span className={`text-[11px] font-bold tracking-widest uppercase transition-colors duration-500 ${isDark ? "text-brand-green" : "text-gray-500"}`}>
+      <div className={`flex w-full items-center z-10 relative transition-all duration-500 ${isDark ? 'justify-start ml-2' : 'justify-end mr-3'}`}>
+        <span className={`text-[10px] font-bold tracking-widest uppercase transition-colors duration-500 ${isDark ? "text-brand-green" : "text-gray-500"}`}>
           {isDark ? "Ahorrando" : "Sin Ahorro"}
         </span>
       </div>
