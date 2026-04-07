@@ -42,7 +42,7 @@ export default function Footer() {
               <li>
                 <a href="mailto:ventas@generamexico.com" className="text-gray-500 hover:text-brand-green transition-colors">ventas@generamexico.com</a>
               </li>
-              <li className="text-gray-500">Monterrey • CDMX</li>
+              <li className="text-gray-500">Monterrey</li>
             </ul>
           </div>
 
