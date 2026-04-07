@@ -11,40 +11,45 @@ import 'swiper/css/effect-coverflow';
 
 const testimonials = [
   {
-    name: "Carlos Mendoza",
-    type: "Residencial (Monterrey)",
-    text: "Mi recibo de CFE pasaba de los $8,000 pesos en verano por los minisplits. Después de instalar con Genera México, este último bimestre pagué solo $120 pesos. Fue la mejor decisión financiera para mi familia.",
+    name: "Humberto S.",
+    company: "Empresa",
+    location: "Gral. Escobedo",
+    category: "Industrial",
+    categoryColor: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+    avatarGradient: "from-blue-500 to-brand-green",
+    text: "Antes de instalar, el gasto eléctrico era una carga fuerte para la operación. Con Genera logramos reducir nuestro recibo de forma significativa desde el primer mes. La instalación fue rápida y sin afectar la operación del negocio. Hoy ese ahorro lo estamos reinvirtiendo en crecimiento.",
     rating: 5,
-    delay: 0.1
   },
   {
-    name: "Ana Sofía Herrera",
-    type: "Comercial (Guadalajara)",
-    text: "Como dueña de un restaurante, los refrigeradores nos consumían toda la utilidad. El equipo de Genera instaló todo en 2 días sin afectar la operación. Ahora ese ahorro lo estoy invirtiendo en marketing.",
+    name: "Dr. Edgar C.",
+    company: "Empresa",
+    location: "Monterrey",
+    category: "Comercial",
+    categoryColor: "bg-brand-amber/20 text-brand-amber border-brand-amber/30",
+    avatarGradient: "from-brand-amber to-orange-500",
+    text: "Nos preocupaba que los paneles afectaran la estética de la empresa, pero el diseño quedó muy limpio y bien integrado. Genera se encargó de todo el trámite con CFE, lo cual hizo el proceso muy sencillo para nosotros. Desde entonces hemos visto un ahorro constante mes a mes.",
     rating: 5,
-    delay: 0.2
   },
   {
-    name: "Eduardo Garza",
-    type: "Residencial (Saltillo)",
-    text: "Teníamos miedo de que los paneles afearan la fachada, pero el diseño fue súper limpio y estético. Además el trámite con CFE lo hicieron ellos al 100%. Recomiendo ampliamente su servicio premium.",
+    name: "Arturo M.",
+    company: "Residencial",
+    location: "San Pedro",
+    category: "Residencial",
+    categoryColor: "bg-brand-green/20 text-green-300 border-brand-green/30",
+    avatarGradient: "from-brand-green to-emerald-400",
+    text: "Desde el primer contacto hasta la instalación, el servicio fue muy profesional. Lo que más valoro es el monitoreo, porque puedo ver claramente el ahorro que estamos generando todos los días. Sin duda Genera fue una excelente decisión.",
     rating: 5,
-    delay: 0.3
   },
   {
-    name: "Gabriela Ruiz",
-    type: "Residencial (Querétaro)",
-    text: "Excelente servicio desde el primer contacto hasta la instalación. El monitoreo por la app me encanta porque veo exactamente cuánto estoy ahorrando cada día. Totalmente recomendado.",
+    name: "Instituto Epicentro Monterrey A.C.",
+    company: "Institucional / Educativo",
+    location: "Monterrey",
+    category: "Institucional",
+    categoryColor: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+    avatarGradient: "from-purple-500 to-brand-amber",
+    text: "Lo más sorprendente fue ver resultados desde el primer mes. El ahorro fue evidente desde el primer recibo. Genera nos dio confianza total en cada etapa del proyecto y hoy tenemos un sistema que realmente está optimizando nuestros costos.",
     rating: 5,
-    delay: 0.4
   },
-  {
-    name: "Roberto Garza",
-    type: "Industrial (Nuevo León)",
-    text: "Teníamos un consumo altísimo en nuestra nave industrial. Con el sistema de Genera bajamos nuestro recibo un 95%. La inversión se paga sola muy rápido y además somos más verdes.",
-    rating: 5,
-    delay: 0.5
-  }
 ];
 
 export default function Testimonials() {
@@ -92,26 +97,32 @@ export default function Testimonials() {
             className="!pb-16 [&_.swiper-pagination-bullet]:bg-slate-400 [&_.swiper-pagination-bullet]:opacity-50 [&_.swiper-pagination-bullet-active]:bg-brand-green [&_.swiper-pagination-bullet-active]:opacity-100"
           >
             {testimonials.map((t, idx) => (
-              <SwiperSlide key={idx} className="!w-[320px] md:!w-[420px] !h-auto">
+              <SwiperSlide key={idx} className="!w-[320px] md:!w-[440px] !h-auto">
                 <div className="bg-slate-800/80 border border-slate-700 p-8 rounded-3xl backdrop-blur-sm relative h-full flex flex-col justify-between shadow-xl">
                   <Quote size={40} className="absolute top-6 right-6 text-brand-amber/10" />
                   <div>
-                    <div className="flex gap-1 mb-6 text-brand-amber">
+                    {/* Badge categoría */}
+                    <span className={`inline-block text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border mb-5 ${t.categoryColor}`}>
+                      {t.category}
+                    </span>
+                    {/* Estrellas */}
+                    <div className="flex gap-1 mb-5 text-brand-amber">
                       {[...Array(t.rating)].map((_, i) => (
-                        <Star key={i} size={20} fill="currentColor" />
+                        <Star key={i} size={16} fill="currentColor" />
                       ))}
                     </div>
-                    <p className="text-gray-200 mb-8 leading-relaxed relative z-10">
-                      "{t.text}"
+                    <p className="text-gray-200 leading-relaxed relative z-10 text-[15px]">
+                      &ldquo;{t.text}&rdquo;
                     </p>
                   </div>
-                  <div className="flex items-center gap-4 mt-auto relative z-10">
-                    <div className="w-12 h-12 bg-gradient-to-br from-brand-amber to-brand-green rounded-full flex items-center justify-center text-brand-dark font-bold text-lg shrink-0">
+                  {/* Autor */}
+                  <div className="flex items-center gap-4 mt-8 pt-6 border-t border-slate-700 relative z-10">
+                    <div className={`w-11 h-11 bg-gradient-to-br ${t.avatarGradient} rounded-full flex items-center justify-center text-white font-bold text-base shrink-0`}>
                       {t.name.charAt(0)}
                     </div>
                     <div>
-                      <h4 className="font-bold">{t.name}</h4>
-                      <p className="text-gray-400 text-sm">{t.type}</p>
+                      <h4 className="font-bold text-white text-sm leading-tight">{t.name}</h4>
+                      <p className="text-gray-400 text-xs mt-0.5">{t.company} · {t.location}</p>
                     </div>
                   </div>
                 </div>
