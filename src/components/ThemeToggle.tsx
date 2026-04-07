@@ -34,7 +34,7 @@ export default function ThemeToggle() {
       />
       <div className="flex w-full items-center justify-between z-10 px-1 relative">
         <span className={`text-[11px] font-bold tracking-widest uppercase transition-colors duration-500 ${isDark ? "text-brand-green" : "text-gray-500"}`}>
-          {isDark ? "Ahorrando" : "Normal"}
+          {isDark ? "Ahorrando" : "Sin Ahorro"}
         </span>
       </div>
 
