@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
     // ── Enviar email ────────────────────────────────────
     const { error: emailError } = await resend.emails.send({
-      from: 'Genera México <onboarding@resend.dev>',
+      from: 'Genera México <ventas@generamexico.com>',
       to: DESTINATION_EMAIL,
       subject: `🌞 Nuevo lead: ${name}`,
       attachments,
