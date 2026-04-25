@@ -179,7 +179,7 @@ export default function ProyectoDashboard() {
               </h2>
               
               <div className="space-y-8 relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 dark:before:via-slate-700 before:to-transparent">
-                {project.process.map((step, index) => (
+                {project.process.map((step: any, index: number) => (
                   <div key={index} className="relative flex items-start gap-4">
                     <div className="absolute left-0 mt-1 flex h-6 w-6 items-center justify-center">
                       <div className={`h-3 w-3 rounded-full z-10 ${step.active ? 'bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.2)]' : 'bg-slate-200 dark:bg-slate-600'}`}></div>
