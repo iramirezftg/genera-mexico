@@ -7,6 +7,7 @@ import {
   UploadCloud, CheckCircle, ArrowRight, ArrowLeft,
   Sun, Zap, TrendingDown, Calendar
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 /* ─── tipos ──────────────────────────────────────────────── */
 type FormData = {
@@ -42,6 +43,7 @@ const fadeSlide = {
 export default function QuoteForm() {
   const [step, setStep] = useState(1);
   const TOTAL = 3;
+  const router = useRouter();
 
   const [form, setForm] = useState<FormData>({
     name: '', email: '', phone: '', city: '',
@@ -98,10 +100,17 @@ export default function QuoteForm() {
       </div>
       <h3 className="text-3xl font-bold text-white">¡Cotización recibida!</h3>
       <p className="text-white/70 max-w-xs">Un asesor de Genera se comunicará contigo en menos de 24 horas.</p>
-      <button onClick={() => { setDone(false); setStep(1); setForm({ name:'',email:'',phone:'',city:'',propertyType:'Residencial',zipCode:'',consumption:3200,file:null }); }}
-        className="mt-4 px-8 py-3 rounded-full border border-white/20 text-white/80 hover:bg-white/10 transition-colors text-sm">
-        Enviar otra cotización
-      </button>
+      
+      <div className="flex flex-col gap-3 mt-4 w-full sm:w-auto">
+        <button onClick={() => router.push('/login')}
+          className="px-8 py-3 rounded-full bg-brand-amber text-brand-dark font-bold hover:brightness-110 transition-all shadow-lg shadow-brand-amber/20 text-sm">
+          Llevar seguimiento
+        </button>
+        <button onClick={() => { setDone(false); setStep(1); setForm({ name:'',email:'',phone:'',city:'',propertyType:'Residencial',zipCode:'',consumption:3200,file:null }); }}
+          className="px-8 py-3 rounded-full border border-white/20 text-white/80 hover:bg-white/10 transition-colors text-sm">
+          Nueva cotización
+        </button>
+      </div>
     </motion.div>
   );
 

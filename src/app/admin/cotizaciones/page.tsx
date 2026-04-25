@@ -1,0 +1,117 @@
+"use client";
+
+import React, { useState } from "react";
+
+import { createClient } from "@/utils/supabase/client";
+
+const initialQuotes = [
+  { id: 'mock-1', panels: 18, roi: "37 meses", has_receipt: true, status: "En Proceso" },
+  { id: 'mock-2', panels: 12, roi: "37 meses", has_receipt: true, status: "Nuevo" },
+  { id: 'mock-3', panels: 11, roi: "37 meses", has_receipt: false, status: "Nuevo" },
+  { id: 'mock-4', panels: 12, roi: "37 meses", has_receipt: true, status: "Nuevo" },
+  { id: 'mock-5', panels: 6, roi: "37 meses", has_receipt: false, status: "Nuevo" },
+];
+
+const statusOptions = [
+  "Nuevo",
+  "En Proceso",
+  "Aprobado",
+  "Rechazado",
+];
+
+export default function AdminCotizacionesPage() {
+  const [quotes, setQuotes] = useState<any[]>(initialQuotes);
+  const supabase = createClient();
+
+  React.useEffect(() => {
+    async function loadQuotes() {
+      const { data, error } = await supabase.from('quotes').select('*').order('created_at', { ascending: false });
+      if (data && !error) {
+        setQuotes(data);
+      }
+    }
+    loadQuotes();
+  }, []);
+
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    setQuotes(quotes.map(quote => 
+      quote.id === id ? { ...quote, status: newStatus } : quote
+    ));
+
+    if (true) {
+      await supabase.from('quotes').update({ status: newStatus }).eq('id', id);
+    }
+  };
+
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm min-h-[600px]">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="border-b border-slate-100 dark:border-slate-700">
+              <th className="pb-4 font-semibold text-xs tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                Paneles
+              </th>
+              <th className="pb-4 font-semibold text-xs tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                ROI
+              </th>
+              <th className="pb-4 font-semibold text-xs tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                Recibo
+              </th>
+              <th className="pb-4 font-semibold text-xs tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+                Estado
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-50 dark:divide-slate-700/50">
+            {quotes.map((quote) => (
+              <tr key={quote.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/20 transition-colors">
+                <td className="py-6 text-slate-800 dark:text-slate-200 font-medium whitespace-nowrap">
+                  {quote.panels}
+                </td>
+                <td className="py-6 text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                  {quote.roi}
+                </td>
+                <td className="py-6 whitespace-nowrap">
+                  {quote.has_receipt ? (
+                    <a 
+                      href={quote.receipt_url || "#"} 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-emerald-600 dark:text-emerald-400 font-medium hover:underline text-sm"
+                    >
+                      Ver archivo
+                    </a>
+                  ) : (
+                    <span className="text-slate-400 dark:text-slate-500 text-sm">
+                      Sin recibo
+                    </span>
+                  )}
+                </td>
+                <td className="py-6 whitespace-nowrap">
+                  <select
+                    value={quote.status}
+                    onChange={(e) => handleStatusChange(quote.id, e.target.value)}
+                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer appearance-none pr-10 relative"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 1rem center',
+                      backgroundSize: '1em'
+                    }}
+                  >
+                    {statusOptions.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

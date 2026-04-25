@@ -22,11 +22,21 @@ export default function AdminPage() {
   useEffect(() => {
     // Cargar data desde Supabase
     const fetchProjects = async () => {
-      const { data, error } = await supabase.from('projects').select('*');
-      if (data) {
-        setProjects(data as Project[]);
-      } else if (error) {
-        console.error('Error fetching projects:', error.message || error);
+      try {
+        const { data, error } = await supabase.from('projects').select('*');
+        if (data && data.length > 0) {
+          setProjects(data as Project[]);
+        } else {
+          throw new Error(error?.message || "No data or failed to fetch");
+        }
+      } catch (err: any) {
+        console.warn('Error fetching real projects, using mock data:', err.message || err);
+        // Fallback to mock data if the database isn't connected
+        setProjects([
+          { id: 'PROJ-001', clientName: 'Omar Valencia', clientEmail: 'omar@example.com', stage: 3, installedPowerKW: 5.5, totalPanels: 12, contractDate: '2026-03-24T00:00:00Z' },
+          { id: 'PROJ-002', clientName: 'Empresa S.A.', clientEmail: 'contacto@empresa.com', stage: 2, installedPowerKW: 15.0, totalPanels: 35, contractDate: '2026-04-01T00:00:00Z' },
+          { id: 'PROJ-003', clientName: 'Residencia Familiar', clientEmail: 'familia@example.com', stage: 6, installedPowerKW: 3.2, totalPanels: 6, contractDate: '2025-11-15T00:00:00Z' }
+        ]);
       }
     };
     fetchProjects();

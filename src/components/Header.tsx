@@ -55,6 +55,16 @@ export default function Header() {
             ))}
 
             <ThemeToggle />
+            
+            <a
+              href="/login"
+              className={`text-sm font-semibold tracking-wide transition-colors flex items-center gap-1 ${
+                isScrolled ? 'text-gray-600 dark:text-gray-300 hover:text-brand-green' : 'text-white/90 hover:text-white drop-shadow-sm'
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Entrar
+            </a>
 
             <a
               href="#simulador"
@@ -98,9 +108,18 @@ export default function Header() {
           </div>
 
           <a
+            href="/login"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-gray-600 dark:text-gray-300 font-bold p-3 rounded-xl border-2 border-gray-100 dark:border-slate-800 text-center mt-2 shadow-sm flex items-center justify-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Iniciar Sesión
+          </a>
+
+          <a
             href="#simulador"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="bg-brand-amber text-brand-dark px-4 py-3 rounded-xl font-bold text-center mt-2 shadow-sm"
+            className="bg-brand-amber text-brand-dark px-4 py-3 rounded-xl font-bold text-center shadow-sm"
           >
             Cotizar Ahora
           </a>

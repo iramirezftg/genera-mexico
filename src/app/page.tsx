@@ -126,7 +126,7 @@ export default function LandingPage() {
             Instalación experta, beneficios fiscales y retorno de inversión garantizado.
           </motion.p>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.8 }}>
-            <ShimmerButton text="Calcula tu ahorro gratis" onClick={() => document.getElementById('calculadora')?.scrollIntoView({ behavior: 'smooth' })} />
+            <ShimmerButton text="Ir a cotizar" onClick={() => document.getElementById('simulador')?.scrollIntoView({ behavior: 'smooth' })} />
           </motion.div>
         </div>
       </section>
